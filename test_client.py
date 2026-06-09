@@ -60,8 +60,13 @@ async def main() -> None:
             params=MSP(message=message),
         )
 
+        import time
+        start_time = time.perf_counter()
         print("Sending request (this may take 30-60s while agents chain)...\n")
         response = await client.send_message(request)
+        end_time = time.perf_counter()
+        elapsed_time = end_time - start_time
+        print(f"[Timer] Request completed in {elapsed_time:.2f} seconds\n")
 
         # Parse response
         result_text = ""

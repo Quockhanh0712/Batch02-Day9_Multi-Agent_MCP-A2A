@@ -10,7 +10,14 @@ from langchain_openai import ChatOpenAI
 
 
 def get_llm() -> ChatOpenAI:
-    """Return a ChatOpenAI client pointed at OpenRouter."""
+    """Return a ChatOpenAI client pointed at Nvidia NIM or OpenRouter."""
+    nvidia_key = os.getenv("nvida_key")
+    if nvidia_key and nvidia_key.strip():
+        return ChatOpenAI(
+            model=os.getenv("NVIDIA_MODEL", "meta/llama-3.1-8b-instruct"),
+            openai_api_key=nvidia_key.strip(),
+            openai_api_base="https://integrate.api.nvidia.com/v1",
+        )
     return ChatOpenAI(
         model=os.getenv("OPENROUTER_MODEL", "anthropic/claude-sonnet-4-5"),
         openai_api_key=os.getenv("OPENROUTER_API_KEY"),
